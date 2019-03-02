@@ -1,4 +1,3 @@
-'use strict';
 
 // Requirements:
 // The user must be able to search for parks in one or more states.
@@ -10,16 +9,15 @@
 // Website URL
 // The user must be able to make multiple searches and see only the results for the current search.
 
-const STORE= {
-    result=[];
-}
 
-const apiKey = oOlHWV6kIeyptpALBLHVwe9Hf8MDq8kwhRgOyVcM;
 'use strict';
 
+
+
 // put your own value below!
-const apiKey = ''; 
-const searchURL = 'https://www.googleapis.com/youtube/v3/search';
+const apiKey = 'oOlHWV6kIeyptpALBLHVwe9Hf8MDq8kwhRgOyVcM'; 
+const searchURL = 'https://developer.nps.gov/api/v1/parks';
+
 
 
 function formatQueryParams(params) {
@@ -48,13 +46,12 @@ function displayResults(responseJson) {
   $('#results').removeClass('hidden');
 };
 
-function getYouTubeVideos(query, maxResults=10) {
+function getParks(query, maxResults=10) {
   const params = {
     key: apiKey,
     q: query,
-    part: 'snippet',
     maxResults,
-    type: 'video'
+    
   };
   const queryString = formatQueryParams(params)
   const url = searchURL + '?' + queryString;
@@ -77,9 +74,9 @@ function getYouTubeVideos(query, maxResults=10) {
 function watchForm() {
   $('form').submit(event => {
     event.preventDefault();
-    const searchTerm = $('#js-search-term').val();
-    const maxResults = $('#js-max-results').val();
-    getYouTubeVideos(searchTerm, maxResults);
+    searchTerm = $('#js-search-term').val();
+    maxResults = $('#js-max-results').val();
+    getParks(searchTerm, maxResults);
   });
 }
 
