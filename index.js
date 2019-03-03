@@ -12,8 +12,6 @@
 
 'use strict';
 
-
-// put your own value below!
 const apiKey = 'oOlHWV6kIeyptpALBLHVwe9Hf8MDq8kwhRgOyVcM'; 
 const searchURL = 'https://developer.nps.gov/api/v1/parks?';
 
@@ -46,23 +44,15 @@ function watchForm() {
 
 function displayResults(jsonObj) {
  
-  console.log(jsonObj);
   $('#results-list').empty();
-  
-  for (let x = 0; x < jsonObj.data.length; x++){
-    
+  for (var x in jsonObj.data){
     $('#results-list').append(
       `<li><h3>${jsonObj.data[x].fullName}</h3>
-      <p>${jsonObj.data[x].description}</p>
-      <a href='${jsonObj.data[x].url}'></a>
+      <p>${jsonObj.data[x].description} Visit us here!<a href=${jsonObj.data[x].url}>${jsonObj.data[x].url}</a></p>
       </li>`
     )};
   //display the results section  
   $('#results').removeClass('hidden');
 };
-
-
-
-
 
 $(watchForm);
