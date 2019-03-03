@@ -16,8 +16,8 @@ function watchForm() {
   }
 
   function getParks(state, maxResults=10) {
-// FINISH WITH USING encodeURIComponent or something else to make sure it doesnt show more than maxResult
-    const url = `${searchURL}limit=${maxResults}&q=${state}&api_key=${apiKey}`;
+
+    const url = `${searchURL}limit=${encodeURIComponent(maxResults)}&q=${encodeURIComponent(state)}&api_key=${encodeURIComponent(apiKey)}`;
   
     fetch(url)
       .then(response => {
