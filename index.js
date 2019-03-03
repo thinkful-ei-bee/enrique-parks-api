@@ -13,71 +13,56 @@
 'use strict';
 
 
-
 // put your own value below!
 const apiKey = 'oOlHWV6kIeyptpALBLHVwe9Hf8MDq8kwhRgOyVcM'; 
-const searchURL = 'https://developer.nps.gov/api/v1/parks';
+const searchURL = 'https://developer.nps.gov/api/v1/parks?';
 
+function watchForm() {
+    $('form').submit(event => {
+      event.preventDefault();
+      const state = $('#js-search-term').val();
+      const maxResults = $('#js-max-results').val();
+      console.log(state, maxResults)
+      getParks(state, maxResults);
+    });
+  }
 
+  function getParks(state, maxResults=10) {
+    const url = `${searchURL}limit=${maxResults}&q=${state}&api_key=${apiKey}`;
+    console.log(url);
+  
+    fetch(url)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.statusText);
+      })
+      .then(jsonObj => displayResults(jsonObj))
+      .catch(err => {
+        $('#js-error-message').text(`Something went wrong: ${err.message}`);
+      });
+  }
 
-function formatQueryParams(params) {
-  const queryItems = Object.keys(params)
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-  return queryItems.join('&');
-}
-
-function displayResults(responseJson) {
-  // if there are previous results, remove them
-  console.log(responseJson);
+function displayResults(jsonObj) {
+ 
+  console.log(jsonObj);
   $('#results-list').empty();
-  // iterate through the items array
-  for (let i = 0; i < responseJson.items.length; i++){
-    // for each video object in the items 
-    //array, add a list item to the results 
-    //list with the video title, description,
-    //and thumbnail
+  
+  for (let x = 0; x < jsonObj.data.length; x++){
+    
     $('#results-list').append(
-      `<li><h3>${responseJson.items[i].snippet.title}</h3>
-      <p>${responseJson.items[i].snippet.description}</p>
-      <img src='${responseJson.items[i].snippet.thumbnails.default.url}'>
+      `<li><h3>${jsonObj.data[x].fullName}</h3>
+      <p>${jsonObj.data[x].description}</p>
+      <a href='${jsonObj.data[x].url}'></a>
       </li>`
     )};
   //display the results section  
   $('#results').removeClass('hidden');
 };
 
-function getParks(query, maxResults=10) {
-  const params = {
-    key: apiKey,
-    q: query,
-    maxResults,
-    
-  };
-  const queryString = formatQueryParams(params)
-  const url = searchURL + '?' + queryString;
 
-  console.log(url);
 
-  fetch(url)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    })
-    .then(responseJson => displayResults(responseJson))
-    .catch(err => {
-      $('#js-error-message').text(`Something went wrong: ${err.message}`);
-    });
-}
 
-function watchForm() {
-  $('form').submit(event => {
-    event.preventDefault();
-    searchTerm = $('#js-search-term').val();
-    maxResults = $('#js-max-results').val();
-    getParks(searchTerm, maxResults);
-  });
-}
 
 $(watchForm);
