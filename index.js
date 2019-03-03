@@ -26,8 +26,8 @@ function watchForm() {
   }
 
   function getParks(state, maxResults=10) {
+
     const url = `${searchURL}limit=${maxResults}&q=${state}&api_key=${apiKey}`;
-    console.log(url);
   
     fetch(url)
       .then(response => {
@@ -43,15 +43,17 @@ function watchForm() {
   }
 
 function displayResults(jsonObj) {
- 
+ console.log(jsonObj);
+
   $('#results-list').empty();
-  for (var x in jsonObj.data){
+
+  for (let x=0; x < jsonObj.data.length; x++ ){
     $('#results-list').append(
       `<li><h3>${jsonObj.data[x].fullName}</h3>
       <p>${jsonObj.data[x].description} Visit us here!<a href=${jsonObj.data[x].url}>${jsonObj.data[x].url}</a></p>
       </li>`
     )};
-  //display the results section  
+  
   $('#results').removeClass('hidden');
 };
 
